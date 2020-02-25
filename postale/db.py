@@ -47,8 +47,16 @@ def save_message(message: models.Message): # saves new message or updates existi
 # Logistics
 def _connect_to_db() -> sqlite3.Cursor:
     '''Connect to the local Postale SQLite database and return the corresponding cursor'''
-    pass
+    connection = sqlite3.connect('postale.db')
+    cursor = connection.cursor()
+
+    _setup_db()
+
+    return cursor
 
 def _setup_db():
     '''Set up the database (if it was just created)'''
+
+    # check if each table exists, if correct fields are present
+    #   if not, create/update any missing tables
     pass
