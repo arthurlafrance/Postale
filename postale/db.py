@@ -26,53 +26,56 @@ _TABLES = {
 }
 
 
-
 # Accounts
-def add_mailbox(mailbox: models.Mailbox):
-    '''Add a mailbox to the database'''
-    pass
-
-
-def remove_mailbox(mailbox: models.Mailbox):
-    '''Remove a mailbox from the database'''
-    pass
-
-
-def get_mailboxes() -> [models.Mailbox]:
+def get_mailboxes(cursor: sqlite3.Cursor, url='', addr='', password='') -> [models.Mailbox]:
     '''Get a list of all mailboxes'''
-    pass
+    
+    cursor.execute('SELECT * FROM mailbox') # add WHERE
+    mailboxes = []
+
+    for row in cursor.fetchall():
+        mailboxes.append(models.Mailbox.from_data(row))
+
+    return mailboxes
 
 
-def get_mailbox(identifying_fields_go_here) -> models.Mailbox:
-    '''Get the mailbox matching the given criteria, if it exists'''
+def add_mailbox(cursor: sqlite3.Cursor, mailbox: models.Mailbox):
+    '''Add a mailbox to the database'''
+    
+    query = 'INSERT INTO mailbox(' + ', '.join(column for column in _TABLES['mailbox']) + ') VALUES (?, ?, ?);'
+    cursor.execute(query, mailbox.export())
+
+
+def remove_mailbox(cursor: sqlite3.Cursor, mailbox: models.Mailbox):
+    '''Remove a mailbox from the database'''
     pass
 
 
 
 # Messages/drafts
-def get_messages(*mailboxes: [str]) -> [models.Message]:
+def get_messages(cursor: sqlite3.Cursor, *mailboxes: [str]) -> [models.Message]:
     '''Get all stored messages from the given mailbox(es)'''
     pass
 
 
-def select_messages(criteria_goes_here) -> [models.Message]: # (with criteria)
+def select_messages(cursor: sqlite3.Cursor, criteria_goes_here) -> [models.Message]: # (with criteria)
     '''Select all stored messages from the given mailbox(es) matching the given criteria'''
     pass
 
 
-def save_messages(messages: [models.Message]): # (or update_messages)
+def save_messages(cursor: sqlite3.Cursor, messages: [models.Message]): # (or update_messages)
     '''Save the given messages to the database (or update them in the database if they exist)'''
     pass 
 
 
-def save_message(message: models.Message): # saves new message or updates existing one
+def save_message(cursor: sqlite3.Cursor, message: models.Message): # saves new message or updates existing one
     '''Save the given message to the database, or update the existing message entry if it exists'''
     pass
 
 
 
 # Logistics
-def _connect_to_db() -> sqlite3.Cursor:
+def connect_to_db() -> sqlite3.Cursor:
     '''Connect to the local Postale SQLite database and return the corresponding cursor'''
     connection = sqlite3.connect('postale.db')
     cursor = connection.cursor()
@@ -95,7 +98,7 @@ def _setup_db(cursor: sqlite3.Cursor):
         else:
             if _get_schema_for_table(cursor, table) != _TABLES[table]:
                 cursor.execute(f'DROP TABLE {table}')
-                _create_table(cursor, table)     
+                _create_table(cursor, table)  
 
 
 def _create_table(cursor: sqlite3.Cursor, table: str):
