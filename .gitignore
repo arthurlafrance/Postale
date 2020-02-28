@@ -3,3 +3,9 @@ architecture.txt
 backlog.txt
 
 tests.py
+__pycache__/
+
+postale.db
+
+.gitignore
+.DS_Store
