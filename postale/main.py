@@ -6,6 +6,19 @@
 import argparse
 
 
+class PostaleManager:
+    # manages the state of the postale app -- db functions, reading/writing/storing info, etc
+    
+    _COMMANDS = {
+        'login' : '',
+        'logout' : '',
+
+        'inbox' : '',
+        # ...
+    }
+
+
+# make commands funcs part of PostaleManager
 # Accounts
 def login(mailbox: str, addr: str, password: str):
     '''Add a new mailbox to Postale'''

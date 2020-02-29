@@ -7,7 +7,6 @@ import sqlite3
 
 from mailman import models
 
-
 class PostaleSQLiteClient:
     _TABLES = {
         'mailbox' : {
