@@ -7,7 +7,6 @@ import sqlite3
 
 from mailman import models
 
-
 class PostaleSQLiteClient:
     _TABLES = {
         'mailbox' : {
@@ -33,6 +32,7 @@ class PostaleSQLiteClient:
         self.cursor = connection.cursor()
 
         self._setup_db()
+
 
     # Mailboxes
     def get_mailboxes(self, id=0, url='', addr='', password='') -> [models.Mailbox]:
