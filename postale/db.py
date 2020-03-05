@@ -33,6 +33,7 @@ class PostaleSQLiteClient:
 
         self._setup_db()
 
+
     # Mailboxes
     def get_mailboxes(self, id=0, url='', addr='', password='') -> [models.Mailbox]:
         '''Get a list of all mailboxes'''
